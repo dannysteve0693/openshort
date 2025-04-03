@@ -1,0 +1,41 @@
+type User {
+  id: ID!
+  email: String!
+  createdAt: String!
+  urls: [Url!]!
+}
+
+type Url {
+  id: ID!
+  shortCode: String!
+  originalUrl: String!
+  clicks: Int!
+  expiresAt: String
+  isActive: Boolean!
+  creator: User!
+  analytics: [Click!]!
+}
+
+type Click {
+  id: ID!
+  countryCode: String
+  deviceType: String
+  clickedAt: String!
+}
+
+type Query {
+  getUserUrls: [Url!]! @auth
+  getUrlAnalytics(shortCode: String!): Url @auth
+}
+
+type Mutation {
+  register(email: String!, password: String): AuthPayload!
+  login(email: String!, password: String): AuthPayload!
+  googleLogin(token: String!): AuthPayload!
+  createUrl(originalUrl: String!, customCode: String): Url! @auth
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
